@@ -2,15 +2,30 @@
 - name: Configure local computer
   hosts: pi
 
-  vars:
-    greeting: Welcome
-
   tasks:
     - name: Create config file
       ansible.builtin.template:
         src: templates/my.cfg.j2
         dest: /home/pi/my.cfg
       notify: Restart stuff
+
+    - name: Install Openjdk-8
+      become: yes
+      ansible.builtin.apt:
+        name: openjdk-8-jdk
+        state: latest
+        install_recommends: no
+
+    - name: Download docker
+      command: curl -fsSL https://get.docker.com -o get-docker.sh
+      args:
+        chdir: /home/pi
+
+    - name: Install docker
+      become: yes
+      command: sh get-docker.sh
+      args:
+        chdir: /home/pi
   
   handlers:
     - name: Restart stuff
