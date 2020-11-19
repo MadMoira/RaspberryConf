@@ -1,0 +1,18 @@
+---
+- name: Configure local computer
+  hosts: pi
+
+  vars:
+    greeting: Welcome
+
+  tasks:
+    - name: Create config file
+      ansible.builtin.template:
+        src: templates/my.cfg.j2
+        dest: /home/pi/my.cfg
+      notify: Restart stuff
+  
+  handlers:
+    - name: Restart stuff
+      ansible.builtin.debug:
+        msg: Restarting stuff

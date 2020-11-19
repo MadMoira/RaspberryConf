@@ -1,0 +1,4 @@
+greeting: Welcome Pi Group
+pi_host: "{{ vault_pi_host }}"
+pi_user: "{{ vault_pi_user }}"
+pi_password: "{{ vault_pi_password }}"
