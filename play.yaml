@@ -17,15 +17,19 @@
         install_recommends: no
 
     - name: Download docker
-      command: curl -fsSL https://get.docker.com -o get-docker.sh
-      args:
-        chdir: /home/pi
+      ansible.builtin.get_url:
+        url: https://get.docker.com
+        dest: /home/pi/get-docker.sh
 
     - name: Install docker
       become: yes
       command: sh get-docker.sh
       args:
         chdir: /home/pi
+
+    - name: Add docker group to pi user
+      become: yes
+      command: "usermod -aG docker pi"
   
   handlers:
     - name: Restart stuff
