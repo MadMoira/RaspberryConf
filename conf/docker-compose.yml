@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+
+  jellyfin:
+    image: ghcr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./jellyfin/config:/config
+      - ./jellyfin/tvshows:/data/tvshows
+      - ./jellyfin/music:/data/music
+    devices:
+      - "/dev/dri:/dev/dri"
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud_cm
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nextcloud:/var/www/html
+    networks:
+      - app_network  
+
+networks:
+  app_network:
+    driver: bridge
