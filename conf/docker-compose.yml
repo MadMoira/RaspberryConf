@@ -2,6 +2,18 @@ version: "3.8"
 
 services:
 
+  caddy:
+    image: caddy:latest
+    container_name: caddy_server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+    restart: unless-stopped
+
   jellyfin:
     image: ghcr.io/linuxserver/jellyfin
     container_name: jellyfin

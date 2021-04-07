@@ -1,0 +1,3 @@
+do_host: "{{ vault_host }}"
+do_user: "{{ vault_user }}"
+do_password: "{{ vault_password }}"

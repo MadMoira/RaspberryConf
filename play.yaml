@@ -47,7 +47,7 @@
       become: yes
       command: "usermod -aG docker pi"
 
-    - name: install docker-compose requirements
+    - name: Install docker-compose requirements
       become: yes
       ansible.builtin.apt:
         pkg:
@@ -60,21 +60,6 @@
     - name: Install docker-compose
       become: yes
       command: pip3 install docker-compose
-  
-    - name: Create app directories
-      become: yes
-      ansible.builtin.file:
-        path: '{{ item.path }}'
-        state: directory
-      loop:
-        - { path: /home/pi/apps/jellyfin/config/ }
-        - { path: /home/pi/apps/jellyfin/music/ }
-        - { path: /home/pi/apps/nextcloud/ }
-
-    - name: Copy docker-compose 
-      ansible.builtin.copy:
-        src: conf/docker-compose.yml
-        dest: /home/pi/apps
 
     - name: Install libseccomp2.4.4
       become: yes

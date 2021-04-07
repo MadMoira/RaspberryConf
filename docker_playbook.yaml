@@ -1,0 +1,35 @@
+---
+- name: Configure and restart docker
+  hosts: pi
+
+  tasks:
+    - name: Create app directories
+      become: yes
+      ansible.builtin.file:
+        path: '{{ item.path }}'
+        state: directory
+        mode: 0777
+      loop:
+        - { path: /home/pi/apps/jellyfin/config/ }
+        - { path: /home/pi/apps/jellyfin/music/ }
+        - { path: /home/pi/apps/nextcloud/ }
+        - { path: /home/pi/apps/caddy/}
+        - { path: /home/pi/apps/caddy/data}
+        - { path: /home/pi/apps/caddy/config}
+
+    - name: Copy docker-compose 
+      ansible.builtin.copy:
+        src: conf/docker-compose.yml
+        dest: /home/pi/apps
+      tags:
+      - u_docker
+
+    - name: Copy Caddyfile into the server
+      ansible.builtin.copy:
+        src: conf/Caddyfile
+        dest: /home/pi/apps/caddy/
+
+    - name: Restart docker
+      command: "docker-compose up -d"
+      args: 
+        chdir: /home/pi/apps
