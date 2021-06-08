@@ -1,35 +1,39 @@
 ---
-- name: Configure and restart docker
-  hosts: pi
+- name: Create app directories
+  become_user: webapp
+  ansible.builtin.file:
+    path: '{{ item.path }}'
+    state: directory
+    mode: 0777
+  loop:
+    - { path: /home/webapp/apps/jellyfin/config/ }
+    - { path: /home/webapp/apps/jellyfin/music/ }
+    - { path: /home/webapp/apps/nextcloud/ }
+    - { path: /home/webapp/apps/caddy/}
+    - { path: /home/webapp/apps/caddy/data}
+    - { path: /home/webapp/apps/caddy/config}
 
-  tasks:
-    - name: Create app directories
-      become: yes
-      ansible.builtin.file:
-        path: '{{ item.path }}'
-        state: directory
-        mode: 0777
-      loop:
-        - { path: /home/pi/apps/jellyfin/config/ }
-        - { path: /home/pi/apps/jellyfin/music/ }
-        - { path: /home/pi/apps/nextcloud/ }
-        - { path: /home/pi/apps/caddy/}
-        - { path: /home/pi/apps/caddy/data}
-        - { path: /home/pi/apps/caddy/config}
+- name: Copy docker-compose
+  become_user: webapp
+  ansible.builtin.copy:
+    src: conf/docker-compose.yml
+    dest: /home/webapp/apps
 
-    - name: Copy docker-compose 
-      ansible.builtin.copy:
-        src: conf/docker-compose.yml
-        dest: /home/pi/apps
-      tags:
-      - u_docker
+- name: Copy template for caddy configuration
+  become_user: webapp
+  ansible.builtin.template:
+    src: conf/Caddyfile.j2
+    dest: /home/webapp/apps/caddy/Caddyfile
+    owner: webapp
 
-    - name: Copy Caddyfile into the server
-      ansible.builtin.copy:
-        src: conf/Caddyfile
-        dest: /home/pi/apps/caddy/
+- name: Create container
+  become_user: webapp
+  command: "docker-compose up -d"
+  args: 
+    chdir: /home/webapp/apps
 
-    - name: Restart docker
-      command: "docker-compose up -d"
-      args: 
-        chdir: /home/pi/apps
+- name: Restart containers
+  become_user: webapp
+  command: "docker-compose restart"
+  args:
+    chdir: /home/webapp/apps

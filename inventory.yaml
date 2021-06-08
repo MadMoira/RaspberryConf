@@ -11,5 +11,4 @@ all:
         do1:
           ansible_host: "{{ do_host }}"
           ansible_user: "{{ do_user }}"
-          ansible_password: "{{ do_password }}"
                 

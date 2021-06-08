@@ -1,15 +1,13 @@
 ---
 - name: Configure local computer
-  hosts: pi
+  hosts: do
 
   tasks:
     - name: Install FTP
-      become: yes
       ansible.builtin.apt:
         name: vsftpd
 
     - name: Copy FTP configuration
-      become: yes
       ansible.builtin.copy:
         src: conf/vsftpd.conf
         dest: /etc/vsftpd.conf
@@ -20,13 +18,11 @@
         - Restart vsftpd
 
     - name: Install vim
-      become: yes
       ansible.builtin.apt:
         name: vim
         state: latest
 
     - name: Install Openjdk-8
-      become: yes
       ansible.builtin.apt:
         name: openjdk-8-jdk
         state: latest
@@ -35,20 +31,17 @@
     - name: Download docker
       ansible.builtin.get_url:
         url: https://get.docker.com
-        dest: /home/pi/get-docker.sh
+        dest: /home/webapp/get-docker.sh
 
     - name: Install docker
-      become: yes
       command: sh get-docker.sh
       args:
-        chdir: /home/pi
+        chdir: /home/webapp
 
-    - name: Add docker group to pi user
-      become: yes
-      command: "usermod -aG docker pi"
+    - name: Add docker group to webapp user
+      command: "usermod -aG docker webapp"
 
     - name: Install docker-compose requirements
-      become: yes
       ansible.builtin.apt:
         pkg:
         - libffi-dev
@@ -58,13 +51,15 @@
         - python3-pip
 
     - name: Install docker-compose
-      become: yes
       command: pip3 install docker-compose
 
     - name: Install libseccomp2.4.4
-      become: yes
       ansible.builtin.apt:
         deb: "http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1~bpo10+1_armhf.deb"
+      tags:
+      - arm
+
+    - include: docker_playbook.yaml
 
   handlers:
     - name: Restart vsftpd
