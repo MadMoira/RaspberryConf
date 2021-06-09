@@ -3,6 +3,12 @@
   hosts: do
 
   tasks:
+    - name: Create new user
+      ansible.builtin.user:
+        name: webapp
+        shell: /bin/bash
+        create_home: yes
+
     - name: Install FTP
       ansible.builtin.apt:
         name: vsftpd
