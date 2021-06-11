@@ -26,6 +26,12 @@
     dest: /home/webapp/apps/caddy/Caddyfile
     owner: webapp
 
+- name: Copy Jellyfin network configuration
+  become_user: webapp
+  ansible.builtin.copy:
+    src: conf/network.xml
+    dest: /home/webapp/apps/jellyfin/config/ 
+
 - name: Create container
   become_user: webapp
   command: "docker-compose up -d"

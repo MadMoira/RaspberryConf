@@ -58,6 +58,8 @@
 
     - name: Install docker-compose
       command: pip3 install docker-compose
+      tags:
+      - docker
 
     - name: Install libseccomp2.4.4
       ansible.builtin.apt:
@@ -66,6 +68,8 @@
       - arm
 
     - include: docker_playbook.yaml
+      tags:
+      - docker
 
   handlers:
     - name: Restart vsftpd

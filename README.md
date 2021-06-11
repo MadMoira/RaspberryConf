@@ -8,7 +8,7 @@ ansible-galaxy install -r requirements.yaml
 
 How to run it
 =============
-ansible-playbook play.yaml -i inventory.yaml --ask-vault-pass
+ansible-playbook play.yaml -i inventory.yaml --ask-vault-pass --skip-tags arm
 
 Edit Vault Variables
 ====================
