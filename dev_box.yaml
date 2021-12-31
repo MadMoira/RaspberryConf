@@ -1,0 +1,32 @@
+---
+- name: Configure dev box
+  hosts: hets
+
+  tasks:
+    - name: Create new user
+      ansible.builtin.user:
+        name: maly
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Allow new user ssh access
+      ansible.builtin.user:
+        user: maly
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+    - name: Add java app repo
+      ansible.builtin.apt_repository:
+        repo: ppa:openjdk-r/ppa
+        state: present
+
+    - name: Install vim
+      ansible.builtin.apt:
+        name: vim
+        state: latest
+
+    - name: Install Openjdk-17
+      ansible.builtin.apt:
+        name: openjdk-17-jdk
+        state: latest
+        install_recommends: no

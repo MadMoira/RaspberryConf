@@ -1,0 +1,2 @@
+hets_host: "{{ vault_host }}"
+hets_user: "{{ vault_user }}"
