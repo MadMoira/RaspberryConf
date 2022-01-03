@@ -10,7 +10,7 @@
         create_home: yes
 
     - name: Allow new user ssh access
-      ansible.builtin.user:
+      ansible.builtin.authorized_key:
         user: maly
         state: present
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
@@ -23,10 +23,10 @@
     - name: Install vim
       ansible.builtin.apt:
         name: vim
-        state: latest
+        state: present
 
     - name: Install Openjdk-17
       ansible.builtin.apt:
         name: openjdk-17-jdk
-        state: latest
+        state: present
         install_recommends: no
