@@ -30,3 +30,9 @@
         name: openjdk-17-jdk
         state: present
         install_recommends: no
+
+    - name: Install Postgresql 12
+      ansible.builtin.apt:
+        name: postgresql-12
+        state: present
+        install_recommends: no
