@@ -1,0 +1,11 @@
+---
+- name: Add java app repo
+  ansible.builtin.apt_repository:
+    repo: ppa:openjdk-r/ppa
+    state: present
+
+- name: Install Openjdk-17
+  ansible.builtin.apt:
+    name: openjdk-17-jdk
+    state: present
+    install_recommends: no

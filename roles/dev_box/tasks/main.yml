@@ -1,0 +1,17 @@
+---
+- name: Create new user
+  ansible.builtin.user:
+    name: maly
+    shell: /bin/bash
+    create_home: yes
+
+- name: Allow new user ssh access
+  ansible.builtin.authorized_key:
+    user: maly
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+- name: Install vim
+  ansible.builtin.apt:
+    name: vim
+    state: present
