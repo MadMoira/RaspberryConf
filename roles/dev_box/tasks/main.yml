@@ -5,6 +5,19 @@
     shell: /bin/bash
     create_home: yes
 
+- name: Allow sudo commands for user
+  ansible.builtin.user:
+    name: maly
+    groups: sudo
+    append: yes
+
+- name: Remove password requirements for sudo for user
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%maly'
+    line: '%maly ALL=(ALL) NOPASSWD: ALL'
+
 - name: Allow new user ssh access
   ansible.builtin.authorized_key:
     user: maly

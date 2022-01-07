@@ -1,0 +1,32 @@
+---
+- name: Download NVM installer
+  get_url:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh
+    dest: /tmp/nvm_install.sh
+    mode: 0744
+  become_user: "{{ node_user }}"
+  become: true
+
+- name: Install NVM
+  shell: /tmp/nvm_install.sh
+  become_user: "{{ node_user }}"
+  become: true
+
+- name: Add nvm autocomplete for user
+  blockinfile:
+    block: |
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    insertafter: "# This loads nvm"
+    marker_begin: "Installed nvm autocomplete via Ansible START"
+    marker_end: "Ansible END"
+    path: /home/maly/.bashrc
+    state: present
+  become_user: "{{ node_user }}"
+  become: true
+
+- name: Install lts
+  shell: ". /home/maly/.nvm/nvm.sh && nvm install {{ node_version }} && nvm alias default {{ node_version }}"
+  args:
+    executable: /bin/bash
+  become_user: "{{ node_user }}"
+  become: true
