@@ -22,7 +22,7 @@
   ansible.builtin.authorized_key:
     user: maly
     state: present
-    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', './id_dev_box_free.pub') }}"
 
 - name: Install vim
   ansible.builtin.apt:

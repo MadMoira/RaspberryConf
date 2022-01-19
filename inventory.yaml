@@ -5,17 +5,14 @@ all:
         pi1:
           ansible_host: "{{ pi_host }}"
           ansible_user: "{{ pi_user }}"
-          ansible_password: "{{ pi_password }}"
     do:
       hosts:
         do1:
           ansible_host: "{{ do_host }}"
           ansible_user: "{{ do_user }}"
-
     hets:
       hosts:
         hets1:
           ansible_host: "{{ hets_host }}"
           ansible_user: "{{ hets_user }}"
-          ansible_ssh_private_key_file: "/home/camilo.r/.ssh/dev_box_rsa"
                 
