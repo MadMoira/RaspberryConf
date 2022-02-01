@@ -11,5 +11,8 @@
       vars:
         node_version: 16 
         node_user: maly
+    - role: golang
+      vars:
+        go_user: maly
     - app1
     

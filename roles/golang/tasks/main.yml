@@ -1,0 +1,43 @@
+---
+- name: Download Golang SDK
+  get_url:
+    url: https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
+    dest: /tmp/golang_package.tar.gz
+  become: true
+  become_user: "{{ go_user }}"
+
+- name: Delete previous installation folder
+  file: 
+    path: /home/maly/go
+    state: absent
+
+- name: Extract file
+  unarchive: 
+    remote_src: yes
+    src: /tmp/golang_package.tar.gz
+    dest: /home/maly
+  become: true
+  become_user: "{{ go_user }}"
+
+- name: Delete unpacked package
+  file:
+    path: /tmp/golang_package.tar.gz
+    state: absent
+
+- name: Make sure Profile folder exists
+  file:
+    path: /etc/profile.d
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,go=rx'
+  become: yes
+
+- name: Add go path to system path
+  template:
+    src: golang.sh.j2
+    dest: /etc/profile.d/golang.sh
+    owner: root
+    group: root
+    mode: 'u=rw,go=r'
+  become: yes
