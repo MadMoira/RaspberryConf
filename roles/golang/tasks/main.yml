@@ -1,7 +1,7 @@
 ---
 - name: Download Golang SDK
   get_url:
-    url: https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
+    url: https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
     dest: /tmp/golang_package.tar.gz
   become: true
   become_user: "{{ go_user }}"
